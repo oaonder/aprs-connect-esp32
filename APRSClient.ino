@@ -13,8 +13,11 @@
 #include <ESP8266HTTPClient.h>
 
 ESP8266WiFiMulti WiFiMulti;
+#define STASSID "ONDER"
+#define STAPSK  "FAD798013"
 
-
+const char* ssid     = STASSID;
+const char* password = STAPSK;
 
 void setup() {
 
@@ -23,22 +26,29 @@ void setup() {
 
   Serial.println();
   Serial.println();
-  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
   
   
   
-  for (uint8_t t = 4; t > 0; t--) {
-    Serial.printf("[SETUP] WAIT %d...\n", t);
-    Serial.flush();
-    delay(1000);
-  }
+ 
 
   WiFi.mode(WIFI_STA);
-  WiFiMulti.addAP("SSID", "PASSWORD");
-  Serial.printf("[SETUP] Connected!!!\n");
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
 }
 
 void loop() {
+   Serial.printf("[SENDING APRS]\n");
   // wait for WiFi connection
   if ((WiFiMulti.run() == WL_CONNECTED)) {
 
@@ -55,9 +65,9 @@ void loop() {
   
   send2APRS("TA4APS","17329","3751.58N","02716.16E","Op. Ali 433.5000Mhz QRV","/","-");
   
-  send2APRS("TA4APT","17334","3751.59N","02716.17E","Op. Istemihan","/","-");
+  //send2APRS("TA4APT","17334","3751.59N","02716.17E","Op. Istemihan","/","-");
 
-  send2APRS("TA4IDR","22456","3751.52N","02715.98E","433.5000 QRV","/","-");
+  //send2APRS("TA4IDR","22456","3751.52N","02715.98E","433.5000 QRV","/","-");
 
   
   }
@@ -66,9 +76,10 @@ void loop() {
 }
 
 void send2APRS(char* callsign, char* pass, char* latitude, char* longitude, char* comment, char* symbol1, char* symbol2){
-
+  Serial.printf("[INITIATING APRS] Connected!!!\n");
+  Serial.printf("[INITIATING WiFiClient] Connected!!!\n");
   WiFiClient client;
-  
+  Serial.printf("[INITIATED WiFiClient] Connected!!!\n");
   char login[60];
   char sentence[150];
   char* server = "rotate.aprs.net";
