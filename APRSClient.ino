@@ -13,8 +13,8 @@
 #include <ESP8266HTTPClient.h>
 
 ESP8266WiFiMulti WiFiMulti;
-#define STASSID "ONDER"
-#define STAPSK  "FAD798013"
+#define STASSID "SSID"
+#define STAPSK  "Password0"
 
 const char* ssid     = STASSID;
 const char* password = STAPSK;
